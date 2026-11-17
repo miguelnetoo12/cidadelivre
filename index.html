@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Cidade Livre</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bungee&family=Rubik:wght@400;500;700;800&display=swap">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="wrap">
+  <div class="topbar">
+    <span class="logo">Cidade <i>Livre</i></span>
+    <span class="school">CETI PROF. JOSÉ AMÁVEL · 1º ANO D</span>
+  </div>
+
+  <div class="stage" id="stage">
+    <canvas id="cv" aria-label="Cidade em 3D"></canvas>
+
+    <div class="hud" id="hud" hidden>
+      <div class="mission" id="mission" hidden>
+        <b id="mTitle">Missão</b>
+        <span id="mText">Objetivo</span>
+        <em id="mTime">1:30</em>
+      </div>
+      <div class="hud-right">
+        <span class="chip money"><b id="hMoney">R$ 0</b></span>
+        <span class="chip stars"><b id="hStars">★ 0/12</b></span>
+        <button type="button" class="icon" id="btnSound" aria-label="Som ligado">🔊</button>
+        <button type="button" class="icon" id="btnPause" aria-label="Pausar">⏸</button>
+      </div>
+      <canvas class="radar" id="radar" aria-label="Radar com o mapa da cidade"></canvas>
+      <div class="speed" id="speed" hidden><b id="hSpeed">0</b><small>km/h</small></div>
+      <div class="prompt" id="prompt" hidden></div>
+      <div class="cross" id="cross" hidden></div>
+      <div class="msg" id="msg"><b id="msgBig"></b><span id="msgSmall"></span></div>
+    </div>
+
+    <div class="joy" id="joy" hidden><i></i></div>
+    <div class="tbtns" id="tbtns" hidden>
+      <button type="button" class="tb fire" id="tFire">ATIRAR</button>
+      <button type="button" class="tb act" id="tAct">ENTRAR</button>
+      <button type="button" class="tb" id="tBrake">FREIO</button>
+      <button type="button" class="tb" id="tHorn">BUZINA</button>
+    </div>
+
+    <div class="overlay" id="startScreen">
+      <div class="box">
+        <p class="eyebrow">Mundo aberto em 3D</p>
+        <h1>Cidade <span>Livre</span></h1>
+        <p class="lead">Explore a cidade a pé, entre nos carros estacionados e dirija para onde quiser. Pise nos círculos coloridos para começar as missões, entrar nas lojas e no estande de tiro. Você começa com R$ 200.</p>
+        <ul class="ms">
+          <li><i style="background:#2E7BFF">P</i><span><b>Perseguição</b> você é o policial: alcance o carro dos bandidos</span></li>
+          <li><i style="background:#FFC21A">T</i><span><b>Táxi</b> leve os passageiros antes do tempo acabar</span></li>
+          <li><i style="background:#FF6A1A">E</i><span><b>Entregas</b> pizza quentinha nas casas do bairro</span></li>
+          <li><i style="background:#B44CFF">C</i><span><b>Corrida</b> passe pelos pontos de controle pelas ruas</span></li>
+          <li><i style="background:#FFD24A;color:#3A2A00">★</i><span><b>Estrelas</b> 12 estrelas escondidas pela cidade</span></li>
+          <li><i style="background:#FF5D8F">L</i><span><b>Loja de roupas</b> camisetas, calças, bonés e farda de policial</span></li>
+          <li><i style="background:#19C3B0">✂</i><span><b>Cabeleireiro</b> cortes e cores de cabelo</span></li>
+          <li><i style="background:#2B3A55">A</i><span><b>Estande de tiro</b> acerte os alvos e ganhe dinheiro</span></li>
+        </ul>
+        <div class="controls">
+          <p><b>Celular:</b> dedo esquerdo anda ou dirige (para cima acelera, para baixo freia). Dedo direito arrasta para girar a câmera. Botão <b>ENTRAR</b> perto de um carro e <b>ATIRAR</b> a pé.</p>
+          <p class="keys"><b>Computador:</b> W A S D anda ou dirige · mouse gira a câmera (clique na tela) · E entra e sai do carro · clique ou F atira (a pé) · Q guarda a arma · Shift corre · Espaço = freio de mão · H = buzina / sirene · P pausa</p>
+        </div>
+        <button type="button" class="play" id="btnPlay">Jogar</button>
+        <p class="best" id="bestStart"></p>
+        <p class="nogl" id="noGL" hidden>Este navegador não conseguiu abrir o 3D (WebGL). Tente no Chrome ou atualize o navegador.</p>
+      </div>
+    </div>
+
+    <div class="overlay" id="brief" hidden>
+      <div class="box small">
+        <p class="eyebrow" id="bTag">Missão</p>
+        <h2 id="bTitle">Perseguição</h2>
+        <p class="lead" id="bText"></p>
+        <button type="button" class="play" id="btnGo">Começar</button>
+        <button type="button" class="play alt" id="btnNo">Agora não</button>
+      </div>
+    </div>
+
+    <div class="overlay shopov" id="shop" hidden>
+      <div class="box shopbox">
+        <p class="eyebrow" id="shTag">Loja</p>
+        <h2 id="shTitle">Moda CETI</h2>
+        <p class="lead">Seu dinheiro: <b id="shCash">R$ 0</b> · toque numa opção para comprar e vestir</p>
+        <div id="shBody"></div>
+        <button type="button" class="play" id="shExit">Sair da loja</button>
+      </div>
+    </div>
+
+    <div class="overlay" id="pauseScreen" hidden>
+      <div class="box small">
+        <h2>Pausado</h2>
+        <button type="button" class="play" id="btnResume">Continuar</button>
+        <button type="button" class="play alt" id="btnQuit">Menu</button>
+      </div>
+    </div>
+  </div>
+
+  <p class="foot">W A S D anda/dirige · mouse gira a câmera · E entra no carro · Shift corre · Espaço freio de mão · H buzina · P pausa</p>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
